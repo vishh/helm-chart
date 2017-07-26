@@ -2,6 +2,12 @@ import yaml
 import os
 import sys
 from tornado.httpclient import AsyncHTTPClient
+from tornado.ioloop import IOLoop
+from kubernetes import client
+from psycopg2cffi import compat
+
+compat.register()
+client.configuration.connection_pool_maxsize = 16
 
 def get_config(key, default=None):
     """
@@ -23,7 +29,7 @@ def get_config(key, default=None):
 # rather than the pure-python implementations. The default one starts
 # being too slow to make a large number of requests to the proxy API
 # at the rate required.
-AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
+AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient", max_clients=256)
 
 c.JupyterHub.spawner_class = 'kubespawner.KubeSpawner'
 
@@ -218,7 +224,7 @@ if get_config('cull.enabled', False):
             'name': 'cull-idle',
             'admin': True,
             'command': [
-                '/usr/bin/python3',
+                'python',
                 '/usr/local/bin/cull_idle_servers.py',
                 '--timeout=%s' % cull_timeout,
                 '--cull_every=%s' % cull_every

@@ -1,7 +1,13 @@
 FROM ubuntu:17.04
 
 RUN apt-get update && \
-    apt-get install --yes --no-install-recommends python3 python3-venv && \
+    apt-get install --yes --no-install-recommends \
+            python3 \
+            python3-venv \
+            nodejs-legacy \
+            npm \
+            git \
+            && \
     apt-get purge && apt-get clean
 
 RUN adduser --disabled-password --gecos "Default Jupyter user" jovyan
@@ -11,7 +17,7 @@ RUN mkdir -p /srv/venv && chown -R jovyan:jovyan /srv/venv
 USER jovyan
 
 RUN python3 -m venv /srv/venv
-RUN /srv/venv/bin/pip3 install --no-cache-dir notebook ipykernel jupyterhub
+RUN /srv/venv/bin/pip3 install --no-cache-dir notebook ipykernel git+https://github.com/jupyterhub/jupyterhub@master
 
 ENV PATH /srv/venv/bin:$PATH
 
