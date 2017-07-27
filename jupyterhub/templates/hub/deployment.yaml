@@ -27,6 +27,10 @@ spec:
           claimName: hub-db-dir
       {{- end }}
       containers:
+      - name: ratelimiter
+        image: {{ .Values.hub.ratelimiter.image.name}}:{{ .Values.hub.ratelimiter.image.tag }}
+        ports:
+          - containerPort: 8081
       - name: hub-container
         image: {{ .Values.hub.image.name }}:{{ .Values.hub.image.tag }}
         volumeMounts:
@@ -67,6 +71,3 @@ spec:
             secretKeyRef:
               name: hub-secret
               key: proxy.token
-        ports:
-          - containerPort: 8081
-            name: hub

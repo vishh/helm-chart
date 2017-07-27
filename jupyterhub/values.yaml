@@ -24,6 +24,10 @@ hub:
       cpu: 0.2
       memory: 512Mi
   imagePullPolicy: IfNotPresent
+  ratelimiter:
+    image:
+      name: jupyterhub/k8s-rateproxy
+      tag: v0.1
 
 proxy:
   secretToken: 'generate with openssl rand -hex 64'
