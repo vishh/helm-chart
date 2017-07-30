@@ -29,7 +29,6 @@ hub:
   imagePullPolicy: IfNotPresent
 
 proxy:
-  secretToken: 'generate with openssl rand -hex 64'
   service:
     type: LoadBalancer
     labels: {}
@@ -37,7 +36,7 @@ proxy:
     nodePort: null
   image:
     name: traefik
-    tag: 1.3.4
+    tag: 1.3.3
   resources:
     requests:
       cpu: 0.2

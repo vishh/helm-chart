@@ -21,21 +21,15 @@ spec:
       volumes:
       - configMap:
           defaultMode: 420
-          name: traefik-config-{{ default .Release.Revision .Values.revisionOverride }}
+          name: traefik-config
         name: config
       containers:
       - name: proxy-container
-        image: traefik:1.3.3
+        image: {{ .Values.proxy.image.name }}:{{ .Values.proxy.image.tag }}
         args:
           - --configfile=/config/traefik.toml
         resources:
 {{ toYaml .Values.proxy.resources | indent 12 }}
-        env:
-          - name: CONFIGPROXY_AUTH_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: hub-secret
-                key: proxy.token
         imagePullPolicy: {{ .Values.proxy.imagePullPolicy }}
         volumeMounts:
         - mountPath: /config
