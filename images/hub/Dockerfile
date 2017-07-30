@@ -2,14 +2,17 @@ FROM ubuntu:17.04
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-      git \
-      python3 \
-      python3-setuptools \
-      libcurl4-openssl-dev \
-      build-essential \
       python3-dev \
+      python3 \
+      python3-pip \
+      python3-setuptools \
+      git \
+      curl \
+      libcurl4-openssl-dev \
       libssl-dev \
-      python3-pip && \
+      build-essential \
+      npm \
+      nodejs-legacy && \
      apt-get purge && apt-get clean
 
 ARG NB_USER=jovyan
@@ -24,17 +27,18 @@ RUN adduser --disabled-password \
     ${NB_USER}
 
 RUN pip3 install --no-cache-dir \
-         jupyterhub==0.7.2 \
-         oauthenticator==0.6.0 \
-         statsd==3.2.1 \
          jupyterhub-dummyauthenticator==0.3.1 \
          jupyterhub-tmpauthenticator==0.4 \
          pymysql==0.7.11 \
          psycopg2==2.7.1 \
          pycurl==7.43.0 \
-         mwoauth==0.3.2
+         mwoauth==0.3.2 \
+         cryptography==2.0.2
 
-RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@804947a
+RUN pip3 install --no-cache-dir \
+         git+https://github.com/jupyterhub/jupyterhub@master \
+         git+https://github.com/jupyterhub/kubespawner@b8b2bd4b \
+         git+https://github.com/yuvipanda/oauthenticator@mw-auth-state
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
 ADD cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
