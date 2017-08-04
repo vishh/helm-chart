@@ -36,7 +36,7 @@ RUN pip3 install --no-cache-dir \
 
 RUN pip3 install --no-cache-dir \
          git+https://github.com/jupyterhub/jupyterhub@master \
-         git+https://github.com/jupyterhub/kubespawner@19f9293 \
+         git+https://github.com/jupyterhub/kubespawner@d9c873c \
          git+https://github.com/yuvipanda/oauthenticator@mw-auth-state \
          git+https://github.com/yuvipanda/tmpauthenticator@master
 
