@@ -28,7 +28,6 @@ RUN adduser --disabled-password \
 
 RUN pip3 install --no-cache-dir \
          jupyterhub-dummyauthenticator==0.3.1 \
-         jupyterhub-tmpauthenticator==0.4 \
          pymysql==0.7.11 \
          psycopg2==2.7.1 \
          pycurl==7.43.0 \
@@ -37,8 +36,9 @@ RUN pip3 install --no-cache-dir \
 
 RUN pip3 install --no-cache-dir \
          git+https://github.com/jupyterhub/jupyterhub@master \
-         git+https://github.com/jupyterhub/kubespawner@b8b2bd4b \
-         git+https://github.com/yuvipanda/oauthenticator@mw-auth-state
+         git+https://github.com/jupyterhub/kubespawner@19f9293 \
+         git+https://github.com/yuvipanda/oauthenticator@mw-auth-state \
+         git+https://github.com/yuvipanda/tmpauthenticator@master
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
 ADD cull_idle_servers.py /usr/local/bin/cull_idle_servers.py
