@@ -17,7 +17,7 @@ RUN mkdir -p /srv/venv && chown -R jovyan:jovyan /srv/venv
 USER jovyan
 
 RUN python3 -m venv /srv/venv
-RUN /srv/venv/bin/pip3 install --no-cache-dir notebook ipykernel git+https://github.com/jupyterhub/jupyterhub@master
+RUN /srv/venv/bin/pip3 install --no-cache-dir notebook ipykernel git+https://github.com/jupyterhub/jupyterhub@02f0c4a
 
 ENV PATH /srv/venv/bin:$PATH
 
