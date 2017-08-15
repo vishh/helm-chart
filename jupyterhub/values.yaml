@@ -89,11 +89,6 @@ prePuller:
     name: yuvipanda/image-allnodes-puller
     tag: v0.8
 
-cull:
-  enabled: true
-  timeout: 3600
-  every: 600
-
 admin:
   access: true
   users: null
