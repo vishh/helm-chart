@@ -25,7 +25,7 @@ RUN pip3 install --no-cache-dir \
          psycopg2==2.7.1 \
          pycurl==7.43.0
 
-RUN pip3 --no-cache-dir install git+https://github.com/jupyterhub/kubespawner@804947a
+RUN pip3 --no-cache-dir install git+https://github.com/vishh/kubespawner.git
 
 ADD jupyterhub_config.py /srv/jupyterhub_config.py
 ADD cull_idle_servers.py /usr/local/bin/cull_idle_servers.py

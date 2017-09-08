@@ -2,7 +2,7 @@ hub:
   service:
     type: ClusterIP
   baseUrl: "/"
-  cookieSecret: null
+  cookieSecret: b013ff5d397c3e14feeeaf29211bfe19dd1243ccaf5acf8cb71fb0ea099962b630dd667ba57c380e225d06be27f5a71004e022d250adcb0668a18449cc7ed1c1f0919af36169680d3c4bb67c5c516d30f3bad4965f74465dffd495e511cb5af4efd9c94ca751c7d38ea8cbdb42528414be070503c2232ce651211916d314d898a9ddd4b70670c8a7a0c2e440782e62d756a33be73af8b1bf502f81fc39c2518e121db90c79544f2290cd89c1ef294ff44e87d52cdb26ce6a1d76405fe0bf556d66678120982a0fc71c77ab6f48b50a781ce64b386380b0359d80d5bf9a74ae25fb04f8d37c5e6c27b58da91732a32e03684c260156e89bff7b1a72a2e68ed8dea046a769158391c293098d8ff07dfbfd78e2449a237f29e6fe6d2641a550cd5010ee5b6ee4397f174da435112fe98129b22f53280ffa041cffbce0d0480a39d5bcc0abeda29dba58b1bef1df7deee5c270a3b2c39ebf2142bef11c4f5f5afac89006bcadc5e758c19c21e11ccdbed5cc23ba41ad41b50b48063bf02e96734d320b85783f6a21a29ae382703e481296ed99d99cabbbb7f27e7e8e72f555dba20c49e475cd10ef9b24ada41954e3e8d52caaa7f363a239eefe23c04e9408d877db7f0fa28869c108483e50b3f86f5fe0e69bf2dfa24680aebdfaf9780368af81d28be22a5a36a16a599bed1b8031ca8a990d1543928e779aae57be8cc01b7b31eac2591b9b499b2527345c8d119e1fc22eff4e4b46727a0599fc1cbb08af69c9733344f79e2af7da031ba0d3a0dfcd889597647e5b890835379afa427040081b65e8d970f8cb8a311defd87cc29e64ad34044233e2f4e256b2ff67dbb50abe478926e2ba523a177446f68ab9c5c506bb3139f44c01337f18b0865f66a54566f83352e2004e6c921b7a92c72e15c32b3c6a5ff321805e9c9af27e67177f167b2a7346a7d7059623483dc1fa8793ef17029479febbc551a9ca35b12a59a7245a81b1d1f0677f0b52b22969213451bc95afdac9b0225ee5b0f85e96a55d4b132f6e1d9b81a5227f84cc04f81b890daeb98d9190ba8d1b8df320361f64becfd8a3adb0bedc87b243297cc9215ee9866fae87c69037a24edef97a4bed43fc9f65eb7da31fbbaf97dbb8d29689906f1205c036e17e8cc3aa65c82d1c0968dac214534a717c1b2867450a1547376b10699510303e846944c18875c2a255c2b86d66f09ca479215f012e042d7eb6ce93e6101c7aba47d7e1d89a2feea28f8c8376f0b3246efbc45c89469b261a1681f6eb7199da8f0263b049c04cb57a06bc02fd2f0d5eec77dd7455436b54db242b6778c741ef2d0f65e50090a3cdd18b12cfc7d75676c332c39daee65944194d65227bcfb502fa624aae79659d6fb19f6ff226c0ad0f1cdd9f0d493636228966465f6111431f282e202c95a4ebf4a1e560d15c007e6a01
   publicURL: null
   db:
     type: sqlite-pvc
@@ -17,8 +17,8 @@ hub:
   labels: null
   extraConfig: null
   image:
-    name: jupyterhub/k8s-hub
-    tag: v0.4
+    name: gcr.io/vishnuk-cloud/jupyterhub
+    tag: v2.2
   resources:
     requests:
       cpu: 0.2
@@ -26,7 +26,7 @@ hub:
   imagePullPolicy: IfNotPresent
 
 proxy:
-  secretToken: 'generate with openssl rand -hex 64'
+  secretToken: 88f03928679eef46a1d27d28e9f3006f554342913568ae85b2c0edbf5ba49154d6f86dd1ae5d8d3cdc6c88aca680a79122e058408667cb883b380a4bc0b4b16c
   service:
     type: LoadBalancer
     labels: {}
@@ -39,7 +39,7 @@ proxy:
     - configurable-http-proxy
     - --ip=0.0.0.0
     - --port=8000
-    - --api-ip=0.0.0.0
+:v    - --api-ip=0.0.0.0
     - --api-port=8001
     - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
     - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
@@ -74,22 +74,21 @@ singleuser:
       pvcName: null
       subPath: "{username}"
     capacity: 10Gi
-    homeMountPath: /home/jovyan
-    # type: hostPath
-    # homeHostPathTemplate: /data/project/paws/userhomes/{userid}
+    homeMountPath: /notebooks/{username}
   image:
-    name: jupyterhub/k8s-singleuser-sample
-    tag: v0.4
+    name: gcr.io/vishnuk-cloud/tensorflow-notebook-gpu
+    tag: v18
   cpu:
     limit: null
     guarantee: null
   memory:
     limit: null
-    guarantee: 1G
-  cmd: jupyterhub-singleuser
+    guarantee: 1.5G
+  nvidiagpu:
+    limit: 1
 
 prePuller:
-  enabled: true
+  enabled: false
   image:
     name: yuvipanda/image-allnodes-puller
     tag: v0.8

@@ -52,8 +52,8 @@ c.KubeSpawner.singleuser_image_spec = os.environ['SINGLEUSER_IMAGE']
 c.KubeSpawner.singleuser_extra_labels = get_config('singleuser.extra-labels', {})
 
 # FIXME: Make this better? 
-c.KubeSpawner.singleuser_uid = 1000
-c.KubeSpawner.singleuser_fs_gid = 1000
+#c.KubeSpawner.singleuser_uid = 0
+#c.KubeSpawner.singleuser_fs_gid = 0
 
 # Configure dynamically provisioning pvc
 storage_type = get_config('singleuser.storage.type')
@@ -71,12 +71,22 @@ if storage_type == 'dynamic':
             'persistentVolumeClaim': {
                 'claimName': 'claim-{username}'
             }
+        },
+        {
+            'name': 'nvidia-libs',
+            'hostPath': {
+                'path': '/home/kubernetes/bin/nvidia/lib'
+            }
         }
     ]
     c.KubeSpawner.volume_mounts = [
         {
             'mountPath': get_config('singleuser.storage.home_mount_path'),
             'name': 'volume-{username}'
+        },
+        {
+            'mountPath': '/usr/local/nvidia/lib64',
+            'name': 'nvidia-libs'
         }
     ]
 elif storage_type == 'hostPath':
@@ -151,6 +161,7 @@ c.KubeSpawner.mem_limit = get_config('singleuser.memory.limit')
 c.KubeSpawner.mem_guarantee = get_config('singleuser.memory.guarantee')
 c.KubeSpawner.cpu_limit = get_config('singleuser.cpu.limit')
 c.KubeSpawner.cpu_guarantee = get_config('singleuser.cpu.guarantee')
+c.KubeSpawner.nvidia_gpu_limit = get_config('singleuser.nvidiagpu.limit')
 
 # Allow switching authenticators easily
 auth_type = get_config('auth.type')
