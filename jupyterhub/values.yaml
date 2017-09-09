@@ -18,7 +18,7 @@ hub:
   extraConfig: null
   image:
     name: gcr.io/vishnuk-cloud/jupyterhub
-    tag: v2.2
+    tag: v2.3
   resources:
     requests:
       cpu: 0.2
@@ -39,7 +39,7 @@ proxy:
     - configurable-http-proxy
     - --ip=0.0.0.0
     - --port=8000
-:v    - --api-ip=0.0.0.0
+    - --api-ip=0.0.0.0
     - --api-port=8001
     - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
     - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
@@ -77,18 +77,18 @@ singleuser:
     homeMountPath: /notebooks/{username}
   image:
     name: gcr.io/vishnuk-cloud/tensorflow-notebook-gpu
-    tag: v18
+    tag: v20
   cpu:
     limit: null
     guarantee: null
   memory:
     limit: null
-    guarantee: 1.5G
+    guarantee: 1500M
   nvidiagpu:
     limit: 1
 
 prePuller:
-  enabled: false
+  enabled: true
   image:
     name: yuvipanda/image-allnodes-puller
     tag: v0.8
